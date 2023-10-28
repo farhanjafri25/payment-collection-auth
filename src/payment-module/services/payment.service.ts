@@ -45,4 +45,38 @@ export class PaymentService {
       return saveTransaction;
     } catch (error) {}
   }
+  async addWebHookTransaction(body: any): Promise<any> {
+    try {
+      const entity = body.entity;
+      const order = await this.paymentRepository.getOrderById(entity.order_id);
+      if (!order) {
+        throw new BadRequestException('Selected order not found');
+      }
+      if (entity.status.toUpperCase() !== 'CAPTURED') {
+        await this.paymentRepository.updateOrder({
+          payerId: body.userId,
+          orderId: body.orderId,
+          orderStatus: 'SUCCESS',
+        });
+      }
+      const doesTransactionExists =
+        await this.paymentRepository.findTransaction(entity.id);
+      if (doesTransactionExists) {
+        console.log('this transaction already exist in database');
+        throw new BadRequestException(
+          'Payment verification failed,used transaction!',
+        );
+      }
+      const saveTransaction = await this.paymentRepository.addTransaction({
+        ...body.entity,
+        recieverId: order.reciever_id,
+        payerId: order.payer_id,
+        amount: order.order_amount,
+      });
+      return saveTransaction;
+    } catch (error) {
+      console.log(`Error creating transaction`, error);
+      return null;
+    }
+  }
 }

@@ -1,10 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { createRazorpayOrder } from '../../razorpay/razorpay.service';
+import { Utility } from '../../utils/utility';
+import { createRazorpayLink } from '../../razorpay/razorpay.service';
 import { UserOrderRepository } from '../repositories/user-order.repository';
 
 @Injectable()
 export class UserOrderService {
-  constructor(private userOrderRepository: UserOrderRepository) {}
+  constructor(
+    private userOrderRepository: UserOrderRepository,
+    private utility: Utility,
+  ) {}
 
   public async getUserOrders(
     type: string,
@@ -35,17 +39,21 @@ export class UserOrderService {
   }
   public async createUserOrder(body: any): Promise<any> {
     try {
+      const orderId = this.utility.generateOrderId(body.userId);
       const payload = {
         amount: `${body.amount}`,
         currency: 'INR',
-        reciept: 'wsqaq1',
-        partial_payment: false,
+        receipt: `${orderId}`,
+        customer: {
+          email: `${body.payerEmail}`,
+        },
       };
-      const orderId = await createRazorpayOrder(payload);
+      const paymentLink = await createRazorpayLink(payload);
       if (!orderId) throw new BadRequestException('Unable to create Order');
       const saveOrder = await this.userOrderRepository.saveUserOrder({
         ...body,
         orderId,
+        paymentLink,
       });
       if (!saveOrder) throw new BadRequestException('Something went wrong');
       return saveOrder;

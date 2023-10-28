@@ -4,4 +4,5 @@ export interface CreateOrder {
   orderId: string;
   amount: number;
   orderStatus: string;
+  paymentLink: string;
 }

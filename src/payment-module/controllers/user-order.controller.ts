@@ -42,12 +42,15 @@ export class UserOrderController {
   @Post('/create-order')
   async createUserOrder(
     @Body() body: UserInvoice,
-    @GetCurrentUser('id') id: string,
+    @GetCurrentUser('id') userId: string,
   ): Promise<any> {
     if (!body.amount) throw new BadRequestException('Amount should be added');
     if (!body.payerUserId)
       throw new BadRequestException('Payer should be added');
-    const res = await this.userOrderService.createUserOrder({ ...body, id });
+    const res = await this.userOrderService.createUserOrder({
+      ...body,
+      userId,
+    });
     return res;
   }
 

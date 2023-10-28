@@ -23,4 +23,7 @@ export class OrderEntity extends BaseEntity {
 
   @Column({ name: 'order_type', nullable: true })
   orderType: string;
+
+  @Column({ name: 'payment_link', nullable: false })
+  paymentLink: string;
 }

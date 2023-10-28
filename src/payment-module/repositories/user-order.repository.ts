@@ -58,6 +58,7 @@ export class UserOrderRepository {
       orderObj.payerId = body.payerId;
       orderObj.recieverId = body.receiverId;
       orderObj.price = Number(body.amount);
+      orderObj.paymentLink = body.paymentLink;
       const saveOrder = await this.userOrderRepository.save(orderObj);
       return saveOrder;
     } catch (error) {

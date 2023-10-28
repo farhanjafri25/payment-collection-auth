@@ -65,8 +65,8 @@ export class PaymentRepository {
       transactionObj.orderId = body.orderId;
       transactionObj.payerId = body.payerId;
       transactionObj.recieverId = body.receiverId;
-      transactionObj.transactionId = body.transactionId;
-      transactionObj.transactionStatus = body.transactionStatus;
+      transactionObj.transactionId = body.id;
+      transactionObj.transactionStatus = body.status;
       const res = await this.paymentRepository.create(transactionObj);
       return res;
     } catch (error) {

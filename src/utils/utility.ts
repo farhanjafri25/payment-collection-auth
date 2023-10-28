@@ -13,4 +13,8 @@ export class Utility {
         `${isAdmin ? 1 : 0}`,
     );
   }
+  public generateOrderId(userId: string) {
+    const currentTime = new Date().getTime();
+    return `order_${userId}_${currentTime}`;
+  }
 }

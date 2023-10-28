@@ -5,11 +5,23 @@ const razorpayService = new RazorPay({
   key_secret: 'wWyUfXgaCx334E3qnhHDhQy3',
 });
 
-export const createRazorpayOrder = async (payload) => {
+export const createRazorpayLink = async (payload) => {
   try {
-    return await razorpayService.orders.create(payload);
+    return await razorpayService.paymentLink.create(payload);
   } catch (error) {
     console.log(`---- ~ Order create error ~ ----`, error);
     return null;
+  }
+};
+
+export const verifySignature = async (body: any, signature: string) => {
+  try {
+    return await razorpayService.webhooks.verifyWebhookSignature(
+      body,
+      signature,
+      `${process.env.RAZORPAY_SECRETKEY}`,
+    );
+  } catch (error) {
+      log
   }
 };

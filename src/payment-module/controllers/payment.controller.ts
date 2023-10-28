@@ -15,6 +15,7 @@ import { PaymentService } from '../services/payment.service';
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
+  //API to Add Transaction for Orders Razorpay
   @Post('/add-transaction')
   async addPaymentTransaction(
     @Body() body: TransactionDto,
@@ -32,6 +33,14 @@ export class PaymentController {
       userId,
     });
     if (!res) throw new BadRequestException('Something went wrong');
+    return res;
+  }
+
+  //Webhook to add Transaction for a payment
+  @Post('/webhook')
+  async transactionWebhook(@Body() body: any): Promise<any> {
+    console.log(`transactionWebhook body`, body);
+    const res = await this.paymentService.addWebHookTransaction(body);
     return res;
   }
 }
