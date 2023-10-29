@@ -19,6 +19,7 @@ import { UserOrderService } from '../services/user-order.service';
 export class UserOrderController {
   constructor(private readonly userOrderService: UserOrderService) {}
 
+  //Get user Orders, queryParam type to distinguish between reciever and payer
   @Get('/orders')
   async getUserPayments(
     @Query('type') type: string,
@@ -38,7 +39,7 @@ export class UserOrderController {
       nextPage: res[res.length - 1]?.id ?? null,
     };
   }
-
+  //Create order by a user
   @Post('/create-order')
   async createUserOrder(
     @Body() body: UserInvoice,
@@ -53,7 +54,7 @@ export class UserOrderController {
     });
     return res;
   }
-
+  //Delete order by user
   @Delete(`/delete-order`)
   async deleteUserOrder(
     @Body() body: DeleteInvoice,

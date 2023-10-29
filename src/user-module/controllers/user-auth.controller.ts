@@ -17,12 +17,14 @@ import { UserAuthService } from '../services/user-auth.service';
 export class UserAuthController {
   constructor(private readonly userAuthService: UserAuthService) {}
 
+  /*API to sign-up for a user, Input parameters are name, email, password*/
   @Public()
   @Post('/signup')
   public async userSignUp(@Body() body: UserDto): Promise<UserSignUpInterface> {
     if (!body.email || !body.password || !body.name) {
       throw new BadRequestException('All fields are required');
     }
+    //Validation to check if the incoming body request has these keys
     const validUserKeys = ['name', 'email', 'password'];
     const isValidUserObj = Object.keys(body).every((key) =>
       validUserKeys.includes(key),
@@ -39,6 +41,7 @@ export class UserAuthController {
     return res;
   }
 
+  /** API to login for a user, input fields are email and password */
   @Public()
   @Post('/login')
   public async loginUser(

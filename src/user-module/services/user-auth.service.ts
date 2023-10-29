@@ -50,6 +50,7 @@ export class UserAuthService {
     try {
       const user = await this.userAuthRepository.findUser(body.email);
       if (!user) throw new BadRequestException('Not authorized to perform');
+      //Compare the incoming password and user saved password
       const comparePassword = await bcrypt.compare(
         body.password,
         user.password,

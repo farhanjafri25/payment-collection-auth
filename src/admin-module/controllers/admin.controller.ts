@@ -19,6 +19,7 @@ import { AdminService } from '../services/admin.services';
 @Controller('/admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
+  //API to get all orders for admin
   @Get('/orders')
   async getAllOrders(
     @Query('type') type: string,
@@ -32,13 +33,14 @@ export class AdminController {
       nextPage: res[res.length - 1]?.id ?? null,
     };
   }
-
+  //API to delete order by admin
   @Delete('/delete-order')
   async deleteOrders(@Body() body: DeleteOrderDto): Promise<any> {
     const res = await this.adminService.deleteOrder(body);
     return res;
   }
 
+  //API to create order by admin
   @Post('/create-order')
   async createOrder(@Body() body: CreateOrderAdmin): Promise<any> {
     if (
@@ -51,7 +53,7 @@ export class AdminController {
     const res = await this.adminService.createOrder(body);
     return res;
   }
-
+  //Update order status by admin
   @Post('/update-order-status')
   async updateOrderStatus(@Body() body: UpdateOrderStatus): Promise<any> {
     if (!body.status || !body.orderId)

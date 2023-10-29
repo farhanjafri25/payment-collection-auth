@@ -6,6 +6,7 @@ import * as crypto from 'crypto';
 @Injectable()
 export class PaymentService {
   constructor(private readonly paymentRepository: PaymentRepository) {}
+  //Function to create transaction for a razorpay order
   async addTransaction(body: any): Promise<any> {
     try {
       const { transactionId, orderId, razorpaySignature, orderStatus } = body;
@@ -45,6 +46,7 @@ export class PaymentService {
       return saveTransaction;
     } catch (error) {}
   }
+  //Function to create  transaction for webhook razorpay-link
   async addWebHookTransaction(body: any): Promise<any> {
     try {
       const entity = body.entity;

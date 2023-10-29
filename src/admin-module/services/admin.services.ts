@@ -28,7 +28,7 @@ export class AdminService {
 
   async deleteOrder(body: any): Promise<any> {
     try {
-      const doesOrderExists = await this.adminRepository.getOrder(body);
+      const doesOrderExists = await this.adminRepository.getOrder(body); //Check if order exists
       if (!doesOrderExists) throw new BadRequestException('No order found');
       const res = await this.adminRepository.deleteOrder(body);
       if (!res) throw new BadRequestException('Something went wrong');
@@ -66,6 +66,7 @@ export class AdminService {
   }
   async updateOrder(body: any): Promise<any> {
     try {
+      //Check if order exists
       const doesOrderExists = await this.adminRepository.getOrderById(
         body.orderId,
       );

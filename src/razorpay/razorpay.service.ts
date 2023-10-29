@@ -5,6 +5,7 @@ const razorpayService = new RazorPay({
   key_secret: 'wWyUfXgaCx334E3qnhHDhQy3',
 });
 
+//Create reazorpay-link
 export const createRazorpayLink = async (payload) => {
   try {
     console.log(`createRazorpayLink Payload`, payload);

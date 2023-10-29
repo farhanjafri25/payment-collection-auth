@@ -16,6 +16,7 @@ import { AdminAuthService } from '../services/admin-auth.service';
 export class AdminAuthController {
   constructor(private readonly adminAuthService: AdminAuthService) {}
 
+  //SignUp API for admin incoming fields are name, email, password
   @Public()
   @Post('/signUp')
   async signupAdmin(@Body() body: AdminSignupDto): Promise<any> {
@@ -37,7 +38,7 @@ export class AdminAuthController {
     if (!res) throw new BadRequestException('Error saving admin');
     return res;
   }
-
+  //API to login for a user
   @Public()
   @Post('/login')
   public async loginUser(@Body() body: AdminLoginDto): Promise<any> {

@@ -49,6 +49,7 @@ export class AdminAuthService {
 
   public async loginAdmin(body: any): Promise<any> {
     try {
+      //Find admin by email to check admin record
       const admin = await this.adminRepository.findAdminByEmail(body.email);
       if (!admin) throw new BadRequestException('Not authorised to perform');
       console.log(`comparePassword`, admin);

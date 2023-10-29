@@ -8,7 +8,7 @@ export class UserAuthRepository {
   constructor(private db: Connection) {
     this.userRepository = this.db.getRepository(UserEntitiy);
   }
-
+  //Save User in DB
   public async saveUser(body: any): Promise<any> {
     try {
       const userObj = new UserEntitiy();

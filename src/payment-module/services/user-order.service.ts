@@ -39,6 +39,7 @@ export class UserOrderService {
       throw new BadRequestException('Something went wrong');
     }
   }
+  //Function to create user order by payment-link
   public async createUserOrder(body: any): Promise<any> {
     try {
       const orderId = this.utility.generateOrderId(body.userId);
