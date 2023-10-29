@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Utility } from '../../utils/utility';
 import { createRazorpayLink } from '../../razorpay/razorpay.service';
 import { UserOrderRepository } from '../repositories/user-order.repository';
+import { UserRoleDto } from '../dtos/user-role.dto';
 
 @Injectable()
 export class UserOrderService {
@@ -24,12 +25,14 @@ export class UserOrderService {
           page,
           pageSize,
         );
-      } else {
+      } else if (type === 'payer') {
         res = await this.userOrderRepository.getUserOrderPayer(
           userId,
           page,
           pageSize,
         );
+      } else {
+        throw new BadRequestException('Invalid Arguments');
       }
       return res;
     } catch (error) {
@@ -41,19 +44,22 @@ export class UserOrderService {
     try {
       const orderId = this.utility.generateOrderId(body.userId);
       const payload = {
-        amount: `${body.amount}`,
+        amount: Number(body.amount),
         currency: 'INR',
-        receipt: `${orderId}`,
+        reference_id: `${orderId}`,
         customer: {
           email: `${body.payerEmail}`,
         },
       };
       const paymentLink = await createRazorpayLink(payload);
+      console.log(`paymentLink -->`, paymentLink);
+      if (!paymentLink) throw new BadRequestException('Unable to create Order');
       if (!orderId) throw new BadRequestException('Unable to create Order');
       const saveOrder = await this.userOrderRepository.saveUserOrder({
         ...body,
-        orderId,
-        paymentLink,
+        orderId: orderId,
+        paymentLink: JSON.stringify(paymentLink),
+        receiverId: body.userId,
       });
       if (!saveOrder) throw new BadRequestException('Something went wrong');
       return saveOrder;

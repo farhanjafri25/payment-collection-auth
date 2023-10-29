@@ -19,7 +19,7 @@ export class AdminAuthService {
       const passwordHash = await hash(body.password, salt);
       const adminId = this.utility.getUniqueId(true);
       const res = await this.adminRepository.saveAdmin({
-        admin: adminId,
+        adminId: adminId,
         password: passwordHash,
         email: body.email,
         adminName: body.name,
@@ -51,22 +51,29 @@ export class AdminAuthService {
     try {
       const admin = await this.adminRepository.findAdminByEmail(body.email);
       if (!admin) throw new BadRequestException('Not authorised to perform');
+      console.log(`comparePassword`, admin);
       const comparePassword = await bcrypt.compare(
         body.password,
         admin.password,
       );
+
       if (!comparePassword) {
         throw new BadRequestException('Passwords do not match');
       }
-      const accessToken = await this.jwtService.sign({
-        userId: admin.admin_id,
-        email: admin.email,
-        name: admin.admin_name,
-      });
+      const accessToken = this.jwtService.sign(
+        {
+          id: admin.adminId,
+          email: admin.email,
+          name: admin.adminName,
+        },
+        {
+          expiresIn: '30d',
+        },
+      );
       return {
         accessToken: accessToken,
-        username: admin.admin_name,
-        adminId: admin.admin_id,
+        username: admin.adminName,
+        adminId: admin.adminId,
         email: admin.email,
       };
     } catch (error) {

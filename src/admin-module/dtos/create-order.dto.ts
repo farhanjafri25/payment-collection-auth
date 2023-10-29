@@ -1,4 +1,10 @@
-import { IsEnum, IsNotEmpty, IsNumberString, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsNumberString,
+  IsString,
+} from 'class-validator';
 import { TransactionStatusEnum } from '../../payment-module/enums/transaction-status.enum';
 
 export class CreateOrderAdmin {
@@ -7,13 +13,16 @@ export class CreateOrderAdmin {
   payerUserId: string;
 
   @IsNotEmpty()
-  @IsNumberString()
   amount: string;
 
   @IsNotEmpty()
   @IsString()
-  reciverId: string;
+  recieverId: string;
 
   @IsEnum(TransactionStatusEnum)
   orderStatus: TransactionStatusEnum;
+
+  @IsEmail()
+  @IsNotEmpty()
+  payerEmail: string;
 }

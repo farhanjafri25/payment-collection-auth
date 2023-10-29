@@ -15,7 +15,7 @@ import { PaymentService } from '../services/payment.service';
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  //API to Add Transaction for Orders Razorpay
+  //API to Add Transaction for Orders Razorpay (Not using for the current scope of assignment)
   @Post('/add-transaction')
   async addPaymentTransaction(
     @Body() body: TransactionDto,
@@ -36,7 +36,7 @@ export class PaymentController {
     return res;
   }
 
-  //Webhook to add Transaction for a payment
+  //Webhook to add Transaction for a payment-link
   @Post('/webhook')
   async transactionWebhook(@Body() body: any): Promise<any> {
     console.log(`transactionWebhook body`, body);

@@ -15,6 +15,6 @@ export class Utility {
   }
   public generateOrderId(userId: string) {
     const currentTime = new Date().getTime();
-    return `order_${userId}_${currentTime}`;
+    return `odr_${userId.split(':')[0]}_${currentTime}`;
   }
 }

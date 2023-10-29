@@ -40,6 +40,7 @@ export class UserOrderRepository {
         where: {
           payerId: userId,
           id: MoreThan(page),
+          isDeleted: false,
         },
         take: pageSize,
       });
@@ -55,11 +56,12 @@ export class UserOrderRepository {
       const orderObj = new OrderEntity();
       orderObj.orderId = body.orderId;
       orderObj.orderStatus = body.orderStatus;
-      orderObj.payerId = body.payerId;
+      orderObj.payerId = body.payerUserId;
       orderObj.recieverId = body.receiverId;
       orderObj.price = Number(body.amount);
       orderObj.paymentLink = body.paymentLink;
       const saveOrder = await this.userOrderRepository.save(orderObj);
+      console.log(`SaveOrder response`, saveOrder);
       return saveOrder;
     } catch (error) {
       console.log(`------- ~ Error creating Order ~ -----`, error);

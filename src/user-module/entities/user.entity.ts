@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/base/entites/base.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity({ name: 'user_details' })
 export class UserEntitiy extends BaseEntity {
@@ -9,10 +9,12 @@ export class UserEntitiy extends BaseEntity {
   @Column({ name: 'user_name' })
   userName: string;
 
+  @Index()
   @Column({ name: 'user_id', primary: true, nullable: false })
   userId: string;
 
-  @Column({ name: 'email', nullable: false })
+  @Index()
+  @Column({ name: 'email', nullable: false, primary: true })
   email: string;
 
   @Column({ name: 'password', nullable: false })

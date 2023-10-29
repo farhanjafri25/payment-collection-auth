@@ -35,7 +35,7 @@ export class UserOrderController {
     );
     return {
       docs: res,
-      nextPage: res[res.length - 1].id,
+      nextPage: res[res.length - 1]?.id ?? null,
     };
   }
 
@@ -65,6 +65,10 @@ export class UserOrderController {
       ...body,
       userId,
     });
-    return res;
+    if (!res) throw new BadRequestException('Something went wrong');
+    return {
+      code: 201,
+      message: 'Deleted successsfully!',
+    };
   }
 }

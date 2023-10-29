@@ -58,7 +58,7 @@ export class UserAuthService {
         throw new BadRequestException('Passwords do not match');
       }
       const accessToken = await this.jwtService.sign({
-        userId: user.id,
+        userId: user.userId,
         email: user.email,
         name: user.userName,
       });

@@ -1,7 +1,8 @@
 import { BaseEntity } from 'src/base/entites/base.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity({ name: 'admin_details' })
+@Unique(['email'])
 export class AdminEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'increment_id' })
   id: number;

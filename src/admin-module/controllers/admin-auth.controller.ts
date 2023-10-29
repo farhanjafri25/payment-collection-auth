@@ -40,19 +40,17 @@ export class AdminAuthController {
 
   @Public()
   @Post('/login')
-  public async loginUser(body: AdminLoginDto): Promise<any> {
-    try {
-      if (!body.email || !body.password)
-        throw new BadRequestException('All fields are required');
-      const validUserKeys = ['email', 'password'];
-      const isValidUserObj = Object.keys(body).every((key) =>
-        validUserKeys.includes(key),
-      );
-      if (!isValidUserObj) {
-        throw new BadRequestException('Something Went Wrong');
-      }
-      const res = await this.adminAuthService.loginAdmin(body);
-      return res;
-    } catch (error) {}
+  public async loginUser(@Body() body: AdminLoginDto): Promise<any> {
+    if (!body.email || !body.password)
+      throw new BadRequestException('All fields are required');
+    const validUserKeys = ['email', 'password'];
+    const isValidUserObj = Object.keys(body).every((key) =>
+      validUserKeys.includes(key),
+    );
+    if (!isValidUserObj) {
+      throw new BadRequestException('Something Went Wrong');
+    }
+    const res = await this.adminAuthService.loginAdmin(body);
+    return res;
   }
 }

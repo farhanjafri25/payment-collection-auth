@@ -9,7 +9,7 @@ import { AdminAuthService } from './services/admin-auth.service';
 import { AdminService } from './services/admin.services';
 
 @Module({
-  imports: [JwtModule.register({ secret: `${process.env.JWT_SECRET}` })],
+  imports: [JwtModule.register({ secret: `jwtSecret` })],
   controllers: [AdminAuthController, AdminController],
   providers: [
     AdminAuthService,

@@ -1,10 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { createRazorpayOrder } from '../../razorpay/razorpay.service';
+import { createRazorpayLink } from '../../razorpay/razorpay.service';
+import { Utility } from '../../utils/utility';
 import { AdminRepository } from '../repositories/admin.repository';
 
 @Injectable()
 export class AdminService {
-  constructor(private readonly adminRepository: AdminRepository) {}
+  constructor(
+    private readonly adminRepository: AdminRepository,
+    private readonly utility: Utility,
+  ) {}
 
   async getOrders(type: string, page: number, pageSize: number): Promise<any> {
     try {
@@ -36,15 +40,23 @@ export class AdminService {
   }
   async createOrder(body: any): Promise<any> {
     try {
+      const orderId = this.utility.generateOrderId(body.recieverId);
       const payload = {
-        amount: `${body.amount}`,
+        amount: Number(body.amount),
         currency: 'INR',
-        reciept: 'wsqaq1',
-        partial_payment: false,
+        reference_id: `${orderId}`,
+        customer: {
+          email: `${body.payerEmail}`,
+        },
       };
-      const orderId = createRazorpayOrder(payload);
+      const paymentLink = await createRazorpayLink(payload);
+      if (!paymentLink) throw new BadRequestException('Error creating order');
       if (!orderId) throw new BadRequestException('Unable to create Order');
-      const saveUserOrder = await this.adminRepository.createOrderByAdmin(body);
+      const saveUserOrder = await this.adminRepository.createOrderByAdmin({
+        ...body,
+        paymentLink: paymentLink,
+        orderId: orderId,
+      });
       if (!saveUserOrder) throw new BadRequestException('Somethin went wrong');
       return saveUserOrder;
     } catch (error) {

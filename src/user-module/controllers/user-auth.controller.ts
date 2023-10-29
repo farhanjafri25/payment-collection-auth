@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Post,
   UseInterceptors,
@@ -18,31 +19,31 @@ export class UserAuthController {
 
   @Public()
   @Post('/signup')
-  public async userSignUp(body: UserDto): Promise<UserSignUpInterface> {
-    try {
-      if (!body.email || !body.password || !body.name) {
-        throw new BadRequestException('All fields are required');
-      }
-      const validUserKeys = ['name', 'email', 'password'];
-      const isValidUserObj = Object.keys(body).every((key) =>
-        validUserKeys.includes(key),
+  public async userSignUp(@Body() body: UserDto): Promise<UserSignUpInterface> {
+    if (!body.email || !body.password || !body.name) {
+      throw new BadRequestException('All fields are required');
+    }
+    const validUserKeys = ['name', 'email', 'password'];
+    const isValidUserObj = Object.keys(body).every((key) =>
+      validUserKeys.includes(key),
+    );
+    if (!isValidUserObj) {
+      throw new BadRequestException('Something Went Wrong');
+    }
+    if (!body['name'].match(/^[0-9a-zA-Z]+$/)) {
+      throw new BadRequestException(
+        'Username must not contain special characters',
       );
-      if (!isValidUserObj) {
-        throw new BadRequestException('Something Went Wrong');
-      }
-      if (!body['name'].match(/^[0-9a-zA-Z]+$/)) {
-        throw new BadRequestException(
-          'Username must not contain special characters',
-        );
-      }
-      const res = await this.userAuthService.saveNewUser(body);
-      return res;
-    } catch (error) {}
+    }
+    const res = await this.userAuthService.saveNewUser(body);
+    return res;
   }
 
   @Public()
   @Post('/login')
-  public async loginUser(body: UserLoginDto): Promise<UserSignUpInterface> {
+  public async loginUser(
+    @Body() body: UserLoginDto,
+  ): Promise<UserSignUpInterface> {
     try {
       const validUserKeys = ['email', 'password'];
       const isValidUserObj = Object.keys(body).every((key) =>

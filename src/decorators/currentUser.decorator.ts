@@ -8,6 +8,12 @@ import { UserToken } from '../types/user.type';
 export const GetCurrentUser = createParamDecorator(
   (data: string | undefined, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
+    if (request.url.startsWith('/admin')) {
+      const user: UserToken = request.user || request.headers.user;
+      const userId = user.id;
+      if (Number(userId.charAt(userId.length - 1)) === 0)
+        throw new ForbiddenException('Not Found');
+    }
     const user: UserToken = request.user || request.headers.user;
     console.log('user', user);
     if (user === null) {

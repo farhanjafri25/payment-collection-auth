@@ -26,10 +26,11 @@ export class AdminController {
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
   ): Promise<any> {
-    const isAdmin = adminId.charAt(adminId.length - 1);
-    if (!isAdmin) throw new BadRequestException('Not authorised to perform');
     const res = await this.adminService.getOrders(type, page, pageSize);
-    return res;
+    return {
+      docs: res,
+      nextPage: res[res.length - 1]?.id ?? null,
+    };
   }
 
   @Delete('/delete-order')
@@ -37,8 +38,6 @@ export class AdminController {
     @Body() body: DeleteOrderDto,
     @GetCurrentUser('id') adminId: string,
   ): Promise<any> {
-    const isAdmin = adminId.charAt(adminId.length - 1);
-    if (!isAdmin) throw new BadRequestException('Not authorised to perform');
     const res = await this.adminService.deleteOrder(body);
     return res;
   }
@@ -48,13 +47,11 @@ export class AdminController {
     @Body() body: CreateOrderAdmin,
     @GetCurrentUser('id') adminId: string,
   ): Promise<any> {
-    const isAdmin = adminId.charAt(adminId.length - 1);
-    if (!isAdmin) throw new BadRequestException('Not authorised to perform');
     if (
       !body.amount ||
       !body.orderStatus ||
       !body.payerUserId ||
-      !body.reciverId
+      !body.recieverId
     )
       throw new BadRequestException('All fields are required');
     const res = await this.adminService.createOrder(body);
@@ -66,8 +63,6 @@ export class AdminController {
     @Body() body: UpdateOrderStatus,
     @GetCurrentUser('id') adminId: string,
   ): Promise<any> {
-    const isAdmin = adminId.charAt(adminId.length - 1);
-    if (!isAdmin) throw new BadRequestException('Not authorised to perform');
     if (!body.status || !body.orderId)
       throw new BadRequestException('All fields are required');
     const res = await this.adminService.updateOrder(body);
