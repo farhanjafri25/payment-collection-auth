@@ -2,6 +2,7 @@ import { BaseEntity } from 'src/base/entites/base.entity';
 import { Column, Entity, Index, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity({ name: 'user_details' })
+@Unique(['email'])
 export class UserEntitiy extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'increment_id' })
   id: number;

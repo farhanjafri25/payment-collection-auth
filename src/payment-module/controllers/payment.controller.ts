@@ -15,7 +15,7 @@ import { PaymentService } from '../services/payment.service';
 export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
-  //API to Add Transaction for Orders Razorpay (Not using for the current scope of assignment)
+  //API to Add Transaction for Razorpay Orders (Not using for the current scope of assignment)
   @Post('/add-transaction')
   async addPaymentTransaction(
     @Body() body: TransactionDto,

@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Utility } from '../../utils/utility';
 import { createRazorpayLink } from '../../razorpay/razorpay.service';
 import { UserOrderRepository } from '../repositories/user-order.repository';
-import { UserRoleDto } from '../dtos/user-role.dto';
 
 @Injectable()
 export class UserOrderService {

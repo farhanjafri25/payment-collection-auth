@@ -34,19 +34,13 @@ export class AdminController {
   }
 
   @Delete('/delete-order')
-  async deleteOrders(
-    @Body() body: DeleteOrderDto,
-    @GetCurrentUser('id') adminId: string,
-  ): Promise<any> {
+  async deleteOrders(@Body() body: DeleteOrderDto): Promise<any> {
     const res = await this.adminService.deleteOrder(body);
     return res;
   }
 
   @Post('/create-order')
-  async createOrder(
-    @Body() body: CreateOrderAdmin,
-    @GetCurrentUser('id') adminId: string,
-  ): Promise<any> {
+  async createOrder(@Body() body: CreateOrderAdmin): Promise<any> {
     if (
       !body.amount ||
       !body.orderStatus ||
@@ -59,10 +53,7 @@ export class AdminController {
   }
 
   @Post('/update-order-status')
-  async updateOrderStatus(
-    @Body() body: UpdateOrderStatus,
-    @GetCurrentUser('id') adminId: string,
-  ): Promise<any> {
+  async updateOrderStatus(@Body() body: UpdateOrderStatus): Promise<any> {
     if (!body.status || !body.orderId)
       throw new BadRequestException('All fields are required');
     const res = await this.adminService.updateOrder(body);
